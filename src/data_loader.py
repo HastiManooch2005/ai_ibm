@@ -2,21 +2,20 @@ from pathlib import Path
 
 import pandas as pd
 
-DATA_PATH = Path("data/v1/Telco_customer_churn.xlsx")
 
-
-def load_data():
+def load_data(file_path):
     """
-    Read raw dataset (Version 1).
+    Read raw dataset.
+
+    Parameters
+    ----------
+    file_path : str | Path
 
     Returns
     -------
     pandas.DataFrame
     """
-
-    df = pd.read_excel(DATA_PATH)
-
-    return df
+    return pd.read_excel(file_path)
 
 
 def show_dataset_info(df):
@@ -27,35 +26,29 @@ def show_dataset_info(df):
     print("=" * 60)
     print(df.head())
 
-    print()
-
-    print("=" * 60)
+    print("\n" + "=" * 60)
     print("Dataset Shape")
     print("=" * 60)
     print(df.shape)
 
-    print()
-
-    print("=" * 60)
+    print("\n" + "=" * 60)
     print("Columns")
     print("=" * 60)
     print(df.columns.tolist())
 
-    print()
-
-    print("=" * 60)
+    print("\n" + "=" * 60)
     print("Dataset Information")
     print("=" * 60)
     df.info()
 
-    print()
-
-    print("=" * 60)
+    print("\n" + "=" * 60)
     print("Missing Values")
     print("=" * 60)
     print(df.isnull().sum())
 
 
 if __name__ == "__main__":
-    dataframe = load_data()
+    file_path = Path(input("Enter dataset path: ").strip())
+
+    dataframe = load_data(file_path)
     show_dataset_info(dataframe)
