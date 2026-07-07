@@ -15,7 +15,7 @@ def load_data(file_path):
     -------
     pandas.DataFrame
     """
-    return pd.read_excel(file_path)
+    return pd.read_csv(file_path)
 
 
 def show_dataset_info(df):

@@ -1,0 +1,156 @@
+# Customer Churn Prediction - MLOps Pipeline
+
+## Project Overview
+
+This project implements a complete MLOps pipeline for predicting customer churn using the IBM Telco Customer Churn dataset.
+
+The pipeline automates the entire machine learning workflow, including:
+
+- Data loading
+- Data preprocessing
+- Feature engineering
+- Model training
+- Model evaluation
+- Experiment tracking with MLflow
+
+This project was developed as part of the Machine Learning course.
+
+---
+
+## Dataset
+
+IBM Telco Customer Churn Dataset
+
+Dataset versions:
+
+- v1 : Raw dataset (.xlsx)
+- v2 : Cleaned dataset (.csv)
+- v3 : Feature engineered dataset (.csv)
+
+---
+
+## Project Structure
+
+```
+project_ai/
+
+│
+├── data/
+│   ├── v1/
+│   ├── v2/
+│   └── v3/
+│
+├── src/
+│   ├── data_loader.py
+│   ├── preprocessing.py
+│   ├── features.py
+│   ├── train.py
+│   ├── evaluate.py
+│   ├── mlflow_utils.py
+│   └── run_pipeline.py
+│
+├── mlruns/
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## Machine Learning Models
+
+The following models are trained and compared:
+
+- Logistic Regression
+- Random Forest
+- XGBoost
+- CatBoost
+
+---
+
+## Evaluation Metrics
+
+Each model is evaluated using:
+
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- ROC-AUC
+- Confusion Matrix
+
+---
+
+## MLflow Logging
+
+For every experiment, the following information is logged:
+
+- Model name
+- Dataset version
+- Hyperparameters
+- Random seed
+- Evaluation metrics
+- Confusion Matrix
+- Trained model
+
+---
+
+## Pipeline
+
+The pipeline consists of the following steps:
+
+1. Load dataset
+2. Data preprocessing
+3. Feature engineering
+4. Train models
+5. Cross Validation
+6. Validation
+7. Test evaluation
+8. MLflow logging
+
+---
+
+## Installation
+
+Create a virtual environment:
+
+```bash
+python -m venv venv
+```
+
+Activate it.
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Run Pipeline
+
+```bash
+python src/run_pipeline.py
+```
+
+---
+
+## Technologies
+
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- XGBoost
+- CatBoost
+- MLflow
+- Matplotlib
+- Seaborn
+
+---
+
+## Author
+
+Hasti Manoochehri
+
+Machine Learning Course Project

@@ -1,54 +1,48 @@
+import os
+
 import mlflow
 import mlflow.sklearn
+import mlflow.xgboost
+import mlflow.catboost
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-import os
+from xgboost import XGBClassifier
+from catboost import CatBoostClassifier
+
+
+EXPERIMENT_NAME = "Customer Churn Prediction"
 
 
 def log_to_mlflow(
-        model,
-        model_name,
-        dataset_version,
-        metrics,
-        seed
+    model,
+    model_name,
+    dataset_version,
+    metrics,
+    seed,
 ):
 
-    with mlflow.start_run():
+    mlflow.set_experiment(EXPERIMENT_NAME)
 
+    with mlflow.start_run(
+        run_name=f"{model_name}_{dataset_version}"
+    ):
+    
 
+        # ======================
+        # Parameters
+        # ======================
 
-        mlflow.log_param(
-            "model_name",
-            model_name
-        )
-
-
-        mlflow.log_param(
-            "dataset_version",
-            dataset_version
-        )
-
-
-        mlflow.log_param(
-            "seed",
-            seed
-        )
-
+        mlflow.log_param("model_name", model_name)
+        mlflow.log_param("dataset_version", dataset_version)
+        mlflow.log_param("seed", seed)
 
         # ======================
         # Hyperparameters
         # ======================
 
-        params = model.get_params()
-
-
-        mlflow.log_params(
-            params
-        )
-
-
+        mlflow.log_params(model.get_params())
 
         # ======================
         # Metrics
@@ -57,70 +51,60 @@ def log_to_mlflow(
         for key, value in metrics.items():
 
             if key != "confusion_matrix":
-
-                mlflow.log_metric(
-                    key,
-                    value
-                )
-
-
+                mlflow.log_metric(key, value)
 
         # ======================
-        #Confusion Matrix
+        # Confusion Matrix
         # ======================
 
         cm = metrics["confusion_matrix"]
 
-
-        plt.figure(
-            figsize=(5,4)
-        )
-
+        plt.figure(figsize=(5, 4))
 
         sns.heatmap(
             cm,
             annot=True,
-            fmt="d"
+            fmt="d",
+            cmap="Blues"
         )
 
+        plt.xlabel("Predicted")
+        plt.ylabel("Actual")
+        plt.title(f"{model_name} - {dataset_version}")
 
-        plt.xlabel(
-            "Prediction"
+        plt.tight_layout()
+
+        file_name = (
+            f"{model_name}_{dataset_version}_confusion_matrix.png"
         )
 
-        plt.ylabel(
-            "Actual"
-        )
-
-
-        plt.title(
-            f"{model_name}-{dataset_version}"
-        )
-
-
-        file_name = "confusion_matrix.png"
-
-
-        plt.savefig(
-            file_name
-        )
-
-
+        plt.savefig(file_name)
         plt.close()
 
-
-
-        mlflow.log_artifact(
-            file_name
-        )
-
-
+        mlflow.log_artifact(file_name)
+        os.remove(file_name)
 
         # ======================
-        # model save
+        # Save Model
         # ======================
 
-        mlflow.sklearn.log_model(
-            model,
-            "model"
-        )
+        if isinstance(model, XGBClassifier):
+
+            mlflow.xgboost.log_model(
+                xgb_model=model,
+                name="model"
+            )
+
+        elif isinstance(model, CatBoostClassifier):
+
+            mlflow.catboost.log_model(
+                cb_model=model,
+                name="model"
+            )
+
+        else:
+
+            mlflow.sklearn.log_model(
+                sk_model=model,
+                name="model"
+            )
